@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌸 小花園探險記 🌸</title>
+<style>
+/* ===== 全域變數 ===== */
+:root {
+  --green: #4CAF50;
+  --rainbow: #E91E63;
+  --male: #2196F3;
+  --female: #FF9800;
+  --gold: #FFD700;
+  --bg: #F0F9E8;
+  --card: #FFFFFF;
+  --text: #333;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  font-family: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+button:hover { transform: scale(1.05); }
+button:active { transform: scale(0.95); }
+
+/* ===== 主頁 ===== */
+#home-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 50%, #ffeaa7 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.home-title {
+  font-size: clamp(2rem, 6vw, 4rem);
+  color: #2d3436;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite;
+}
+.home-subtitle {
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  color: #636e72;
+  margin-bottom: 40px;
+  text-align: center;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.mode-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.mode-btn {
+  padding: 20px 40px;
+  font-size: 1.5rem;
+  color: white;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.2);
+}
+.mode-btn.teacher { background: #6c5ce7; }
+.mode-btn.student { background: #00b894; }
+.back-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  z-index: 100;
+}
+
+/* ===== 投影片系統 ===== */
+#slides-page { display: none; min-height: 100vh; position: relative; }
+.slide {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px 40px 120px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: slideIn 0.5s ease;
+}
+.slide.active { display: flex; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.slide h2 { font-size: clamp(1.5rem, 5vw, 3rem); margin-bottom: 20px; }
+.slide p { font-size: clamp(1rem, 3vw, 1.8rem); line-height: 1.8; }
+.slide .emoji-big { font-size: clamp(3rem, 8vw, 6rem); margin: 15px 0; }
+.slide .small-emoji { font-size: clamp(1.5rem, 4vw, 2.5rem); }
+.action-box {
+  background: #fff3cd;
+  border: 3px dashed #ffc107;
+  border-radius: 20px;
+  padding: 15px 30px;
+  margin: 15px 0;
+  font-size: 1.3rem;
+}
+.color-dot {
+  display: inline-block;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  margin: 0 5px;
+  vertical-align: middle;
+}
+
+/* Slide 主题背景 */
+.slide-3, .slide-4, .slide-5 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+.slide-6, .slide-7, .slide-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+.slide-9, .slide-10, .slide-11 { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+.slide-12, .slide-13, .slide-14 { background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); }
+.slide-1, .slide-2 { background: linear-gradient(135deg, #a8e6cf 0%, #88d8b0 100%); }
+.slide-15 { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+
+/* ===== 投影片控制列 ===== */
+.slide-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.95);
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+  z-index: 50;
+}
+.slide-controls button {
+  padding: 12px 25px;
+  font-size: 1.2rem;
+  color: white;
+}
+.btn-prev { background: #74b9ff; }
+.btn-next { background: #0984e3; }
+.btn-fullscreen { background: #636e72; }
+.btn-start { background: var(--green); font-size: 1.5rem; padding: 15px 40px; }
+.slide-counter {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #2d3436;
+  padding: 0 15px;
+}
+
+/* ===== 學習頁面 ===== */
+#learn-page { display: none; padding: 20px; }
+.learn-section {
+  background: white;
+  border-radius: 25px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+.learn-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.learn-icon {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+.learn-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.learn-content {
+  font-size: 1.4rem;
+  line-height: 2;
+}
+.learn-content li { margin: 10px 0; }
+.speak-btn {
+  background: #00cec9;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+.action-reminder {
+  background: #fff9c4;
+  border-radius: 15px;
+  padding: 12px 20px;
+  margin-top: 15px;
+  font-size: 1.2rem;
+  display: inline-block;
+}
+
+/* ===== 小測驗 ===== */
+.quiz-container { background: white; border-radius: 25px; padding: 25px; margin-top: 20px; }
+.quiz-title { font-size: 1.8rem; color: #2d3436; margin-bottom: 20px; text-align: center; }
+.quiz-item {
+  background: #f8f9fa;
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border-left: 5px solid #dfe6e9;
+}
+.quiz-item.correct { border-left-color: var(--green); background: #e8f5e9; }
+.quiz-item.wrong { border-left-color: #e74c3c; background: #ffebee; }
+.quiz-q {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.quiz-options { display: flex; flex-wrap: wrap; gap: 10px; }
+.quiz-opt {
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  background: white;
+  border: 2px solid #b2bec3;
+  border-radius: 12px;
+  min-width: 120px;
+}
+.quiz-opt:hover { background: #dfe6e9; }
+.quiz-opt.selected { background: #0984e3; color: white; border-color: #0984e3; }
+.quiz-opt.correct { background: var(--green); color: white; border-color: var(--green); }
+.quiz-opt.wrong { background: #e74c3c; color: white; border-color: #e74c3c; }
+.quiz-feedback {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2rem;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.good { background: #d4efdf; color: #2d3436; }
+.quiz-feedback.bad { background: #ffcccc; color: #c0392b; }
+.star-display { font-size: 1.5rem; margin-left: 10px; }
+
+/* ===== 遊戲區 ===== */
+#games-page { display: none; padding: 20px; }
+.games-title { text-align: center; font-size: 2.5rem; margin-bottom: 25px; color: #2d3436; }
+.game-card {
+  background: white;
+  border-radius: 25px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.game-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.game-card p { font-size: 1.2rem; color: #636e72; margin-bottom: 15px; }
+.game-btn {
+  padding: 15px 30px;
+  font-size: 1.3rem;
+  color: white;
+  margin: 5px;
+}
+.game-btn.easy { background: #00b894; }
+.game-btn.medium { background: #fdcb6e; color: #333; }
+.game-btn.hard { background: #e17055; }
+.game-level-label {
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+.game-level-label.easy { background: #d4efdf; color: #00b894; }
+.game-level-label.medium { background: #fef9e7; color: #f39c12; }
+.game-level-label.hard { background: #fadbd8; color: #e74c3c; }
+
+/* 扭蛋機遊戲 */
+.gacha-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+}
+.gacha-machine {
+  width: 250px; height: 350px;
+  background: linear-gradient(135deg, #fd79a8, #e84393);
+  border-radius: 30px 30px 15px 15px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+}
+.gacha-top {
+  position: absolute;
+  top: 15px;
+  width: 80px; height: 80px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: inset 0 5px 15px rgba(0,0,0,0.1);
+}
+.gacha-window {
+  width: 150px; height: 150px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  margin: 60px 0 20px;
+  border: 5px solid white;
+  overflow: hidden;
+}
+.gacha-slot {
+  width: 100px; height: 50px;
+  background: #2d3436;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 20px;
+}
+.gacha-item {
+  display: inline-block;
+  padding: 15px 25px;
+  background: white;
+  border-radius: 15px;
+  font-size: 1.5rem;
+  margin: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  border: 3px solid transparent;
+}
+.gacha-item:hover { transform: scale(1.1); }
+.gacha-item.selected { border-color: #e84393; background: #ffeaa7; }
+.spin-result {
+  font-size: 2rem;
+  margin: 15px 0;
+  min-height: 60px;
+  text-align: center;
+}
+.capsule-collection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.capsule {
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+}
+.capsule.green { background: #d4efdf; }
+.capsule.pink { background: #ffeaa7; }
+.capsule.blue { background: #dfe6e9; }
+.capsule.orange { background: #fdea7a; }
+
+/* 夾公仔遊戲 */
+.claw-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.claw-game-bg {
+  width: 100%;
+  max-width: 400px;
+  background: linear-gradient(180deg, #74b9ff 0%, #0984e3 100%);
+  border-radius: 20px;
+  padding: 20px;
+  position: relative;
+  min-height: 300px;
+}
+.claw-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 20px;
+}
+.claw-item {
+  width: 70px; height: 70px;
+  background: white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.claw-item:hover { transform: scale(1.1); }
+.claw-item.matched { background: #d4efdf; border: 3px solid var(--green); }
+.claw-target {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255,255,255,0.3);
+  border-radius: 15px;
+}
+.claw-target-slot {
+  width: 80px; height: 80px;
+  background: rgba(255,255,255,0.5);
+  border: 3px dashed white;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: white;
+}
+.claw-target-slot.filled { background: white; border-style: solid; }
+.match-result {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 15px;
+  min-height: 50px;
+}
+
+/* 小花成長遊戲 */
+.flower-builder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+.flower-stage {
+  width: 100%;
+  max-width: 450px;
+  min-height: 350px;
+  background: linear-gradient(180deg, #a8e6cf 0%, #88d8b0 100%);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px;
+  position: relative;
+}
+.flower-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 200px;
+  justify-content: flex-end;
+}
+.flower-part {
+  font-size: 2rem;
+  text-align: center;
+  padding: 5px;
+}
+.flower-part.highlight { background: #fff9c4; border-radius: 10px; }
+.flower-label {
+  font-size: 1rem;
+  color: white;
+  background: rgba(0,0,0,0.3);
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+.part-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+.part-btn {
+  padding: 10px 20px;
+  background: white;
+  border: 3px solid #b2bec3;
+  border-radius: 12px;
+  font-size: 1.1rem;
+}
+.part-btn:hover { border-color: var(--green); }
+.part-btn.selected { background: var(--green); color: white; border-color: var(--green); }
+.part-btn.locked { background: #dfe6e9; color: #b2bec3; cursor: not-allowed; }
+.build-progress {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.progress-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #dfe6e9;
+}
+.progress-dot.done { background: var(--green); }
+.build-message {
+  font-size: 1.3rem;
+  margin: 10px 0;
+  text-align: center;
+}
+.complete-flower {
+  font-size: 5rem;
+  animation: flowerBloom 1s ease;
+}
+@keyframes flowerBloom {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+/* ===== 老師後台 ===== */
+#admin-page { display: none; padding: 20px; }
+.admin-login {
+  max-width: 400px;
+  margin: 50px auto;
+  background: white;
+  border-radius: 25px;
+  padding: 30px;
+  text-align: center;
+}
+.admin-login input {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  border: 2px solid #dfe6e9;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-family: inherit;
+  text-align: center;
+}
+.admin-login button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.3rem;
+  background: #6c5ce7;
+  color: white;
+}
+.admin-panel { display: none; }
+.student-list {
+  width: 100%;
+  overflow-x: auto;
+}
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+.student-table th, .student-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #dfe6e9;
+  font-size: 1rem;
+}
+.student-table th {
+  background: #6c5ce7;
+  color: white;
+  position: sticky;
+  top: 0;
+}
+.student-table tr:nth-child(even) { background: #f8f9fa; }
+.student-name { font-weight: bold; font-size: 1.2rem; }
+.stat-bar {
+  width: 100%;
+  height: 20px;
+  background: #dfe6e9;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+}
+.stat-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+}
+.stat-fill.green { background: var(--green); }
+.stat-fill.blue { background: var(--male); }
+.stat-fill.orange { background: var(--female); }
+.stat-fill.pink { background: var(--rainbow); }
+
+/* ===== 回饋動畫 ===== */
+@keyframes correctPop {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+@keyframes starBurst {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  100% { transform: scale(2) rotate(360deg); opacity: 0; }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+.correct-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  z-index: 1000;
+  animation: correctPop 0.5s ease;
+}
+.correct-popup .big-emoji { font-size: 4rem; }
+.correct-popup h3 { font-size: 2rem; color: var(--green); margin: 15px 0; }
+.confetti {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+.confetti-piece {
+  position: absolute;
+  width: 15px; height: 15px;
+  animation: confettiFall 2s ease-out forwards;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===== 彈出提示 ===== */
+.toast {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2d3436;
+  color: white;
+  padding: 15px 30px;
+  border-radius: 25px;
+  font-size: 1.2rem;
+  z-index: 500;
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 1.7s forwards;
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } }
+@keyframes toastOut { to { opacity: 0; transform: translateX(-50%) translateY(-20px); } }
+
+/* ===== 頁面切換 ===== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== 全屏模式 ===== */
+:fullscreen .slide-controls { position: fixed; bottom: 0; }
+
+/* ===== 回家任務 ===== */
+.homework-box {
+  background: linear-gradient(135deg, #a8e6cf, #88d8b0);
+  border-radius: 25px;
+  padding: 25px;
+  margin-top: 20px;
+  color: white;
+}
+.homework-box h3 { font-size: 1.8rem; margin-bottom: 15px; }
+.homework-box ul { font-size: 1.2rem; line-height: 2; padding-left: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ===== 主頁 ===== -->
+<div id="home-page" class="page active">
+  <div style="text-align:center;">
+    <div class="emoji-big">🌸🌷🌻🌺</div>
+    <h1 class="home-title">🌟 花花的四個好朋友 🌟</h1>
+    <p class="home-subtitle">小花園探險記</p>
+    <p style="font-size:1.3rem; margin-bottom:30px;">今天我哋開心學習花花秘密！ 😊🌸</p>
+    <button class="mode-btn teacher" onclick="showPage('slides')">📖 老師教學模式</button>
+    <button class="mode-btn student" onclick="showPage('learn')">🎮 學生學習模式</button>
+    <div style="margin-top:30px;">
+      <button class="game-btn easy" onclick="showPage('games')" style="padding:15px 30px;font-size:1.2rem;">🎮 遊戲區</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 投影片頁面 ===== -->
+<div id="slides-page" class="page">
+  <button class="back-btn" onclick="showPage('home')">🏠 回主頁</button>
+
+  <!-- Slide 1 -->
+  <div class="slide slide-1 active" data-slide="1">
+    <div class="emoji-big">🌟🌸🌟</div>
+    <h2>🌟 花花的四個好朋友 🌟</h2>
+    <p>小花園探險記</p>
+    <p style="font-size:1.3rem; margin-top:15px;">今天我哋開心學習花花秘密！ 😊🌸</p>
+    <button class="btn-start" onclick="nextSlide()">🌸 按開始 🌸</button>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide slide-2" data-slide="2">
+    <h2>花花有四個好朋友！</h2>
+    <p>佢哋一齊合作，花先可以開得靚同結果。</p>
+    <div style="font-size:3rem; margin:20px 0;">🟢 🌈 👨 👩</div>
+    <p>我哋慢慢逐個認識啦～</p>
+  </div>
+
+  <!-- Slide 3: 花萼介紹 -->
+  <div class="slide slide-3" data-slide="3">
+    <h2>🟢 花萼（介紹）</h2>
+    <div style="font-size:4rem;">🌿</div>
+    <p class="action-box">綠色小葉子<br>像厚被子<br>功能：保護花花</p>
+    <p style="color:#2d3436; font-weight:bold;">記住：花萼保護花花！</p>
+  </div>
+
+  <!-- Slide 4: 花萼有趣知識1 -->
+  <div class="slide slide-4" data-slide="4">
+    <h2>🟢 花萼小秘密</h2>
+    <p>花未開時，花萼包得好緊<br>好似綠色保護傘 🛡️</p>
+    <p style="margin-top:15px;">香港扶桑花嘅花萼好堅韌！</p>
+    <div class="action-box">動作：雙手抱抱</div>
+  </div>
+
+  <!-- Slide 5: 花萼有趣知識2 -->
+  <div class="slide slide-5" data-slide="5">
+    <h2>🟢 花萼有趣事</h2>
+    <p>有啲花萼會變紅色幫手吸引昆蟲<br>佢保護花蕾好似保鏢咁</p>
+    <p style="margin-top:15px;">九重葛嘅花萼好耐風雨！</p>
+    <div class="action-box">你知唔知？好神奇呀！</div>
+  </div>
+
+  <!-- Slide 6: 花冠介紹 -->
+  <div class="slide slide-6" data-slide="6">
+    <h2>🌈 花冠（介紹）</h2>
+    <div style="font-size:4rem;">🌺🌷🌸</div>
+    <p class="action-box">彩色花瓣<br>好靚好香<br>功能：吸引昆蟲</p>
+    <p style="color:#e84393; font-weight:bold;">記住：花冠吸引昆蟲！</p>
+  </div>
+
+  <!-- Slide 7: 花冠有趣知識1 -->
+  <div class="slide slide-7" data-slide="7">
+    <h2>🌈 花冠小秘密</h2>
+    <p>靚顏色會吸引蜜蜂蝴蝶<br>香港雞蛋花嘅花冠又大又香！</p>
+    <div class="action-box">像穿彩虹衣服跳舞<br>動作：張開手轉圈</div>
+  </div>
+
+  <!-- Slide 8: 花冠有趣知識2 -->
+  <div class="slide slide-8" data-slide="8">
+    <h2>🌈 花冠有趣事</h2>
+    <p><strong>蜜蜂故事：</strong><br>蜜蜂聞到花冠香味，就飛嚟食花蜜，順便幫花傳花粉，好似快樂小郵差！</p>
+    <div class="action-box">昆蟲最鍾意嚟開Party！<br>好有趣呀！</div>
+  </div>
+
+  <!-- Slide 9: 雄蕊介紹 -->
+  <div class="slide slide-9" data-slide="9">
+    <h2>👨 雄蕊（介紹）</h2>
+    <div style="font-size:4rem;">🌾🍯</div>
+    <p class="action-box">有黃色花粉<br>像送禮物<br>功能：送花粉</p>
+    <p style="color:#0984e3; font-weight:bold;">記住：雄蕊送花粉！</p>
+  </div>
+
+  <!-- Slide 10: 雄蕊有趣知識1 -->
+  <div class="slide slide-10" data-slide="10">
+    <h2>👨 雄蕊小秘密</h2>
+    <p>花粉可以飛好遠<br>蜜蜂收集花粉做蜂蜜 🍯</p>
+    <p style="margin-top:15px;">香港扶桑花雄蕊好長！</p>
+    <div class="action-box">動作：拋一拋</div>
+  </div>
+
+  <!-- Slide 11: 雄蕊有趣知識2 -->
+  <div class="slide slide-11" data-slide="11">
+    <h2>👨 雄蕊有趣事</h2>
+    <p><strong>蜜蜂故事：</strong><br>雄蕊將花粉黏喺蜜蜂身上，蜜蜂飛去另一朵花幫忙！</p>
+    <div class="action-box">一朵花有好多雄蕊<br>好厲害呀！</div>
+  </div>
+
+  <!-- Slide 12: 雌蕊介紹 -->
+  <div class="slide slide-12" data-slide="12">
+    <h2>👩 雌蕊（介紹）</h2>
+    <div style="font-size:4rem;">🌸🫒</div>
+    <p class="action-box">喺花中間<br>接收花粉<br>功能：長果實</p>
+    <p style="color:#e17055; font-weight:bold;">記住：雌蕊長果實！</p>
+  </div>
+
+  <!-- Slide 13: 雌蕊有趣知識1 -->
+  <div class="slide slide-13" data-slide="13">
+    <h2>👩 雌蕊小秘密</h2>
+    <p>接收花粉後慢慢變大<br>之後長出我哋食嘅果實 🍎</p>
+    <p style="margin-top:15px;">香港雞蛋花之後會結果！</p>
+  </div>
+
+  <!-- Slide 14: 雌蕊有趣知識2 -->
+  <div class="slide slide-14" data-slide="14">
+    <h2>👩 雌蕊有趣事</h2>
+    <p><strong>蜜蜂故事：</strong><br>蜜蜂幫雌蕊送嚟花粉，雌蕊就開心長成果實</p>
+    <p style="margin-top:15px;">香港紫荊花都靠雌蕊結果</p>
+    <div class="action-box">動作：雙手捧圓<br>好神奇呀！</div>
+  </div>
+
+  <!-- Slide 15: 總結 -->
+  <div class="slide slide-15" data-slide="15">
+    <div class="emoji-big">🎉</div>
+    <h2>恭喜你！</h2>
+    <p>你認識咗花花四個好朋友！</p>
+    <div style="text-align:left; max-width:500px; margin:20px auto; background:rgba(255,255,255,0.5); padding:20px; border-radius:20px;">
+      <p><strong>大有趣知識：</strong></p>
+      <p style="margin-top:10px;">四個朋友 + 蜜蜂合作，花先可以傳宗接代</p>
+      <p style="margin-top:10px;">香港校園好多扶桑花、雞蛋花、九重葛，都係咁神奇！</p>
+      <p style="margin-top:10px;">下次去校園做小偵探，搵真花睇吓佢哋 🌼</p>
+    </div>
+    <p style="font-size:1.5rem; font-weight:bold;">你係花花小專家啦！ 🏆</p>
+  </div>
+
+  <!-- 控制列 -->
+  <div class="slide-controls">
+    <button class="btn-prev" onclick="prevSlide()">⬅️ 上一頁</button>
+    <span class="slide-counter"><span id="current-slide">1</span> / 15</span>
+    <button class="btn-next" onclick="nextSlide()">下一頁 ➡️</button>
+    <button class="btn-fullscreen" onclick="toggleFullscreen()">全屏</button>
+  </div>
+</div>
+
+<!-- ===== 學習頁面 ===== -->
+<div id="learn-page" class="page">
+  <button class="back-btn" onclick="showPage('home')">🏠 回主頁</button>
+  <div style="max-width:800px; margin:0 auto; padding-bottom:80px;">
+    <h1 style="text-align:center; font-size:2rem; margin:20px 0;">📚 學習頁面 📚</h1>
+
+    <!-- 花萼 -->
+    <div class="learn-section">
+      <div class="learn-header">
+        <div class="learn-icon" style="background:var(--green);">🟢</div>
+        <div>
+          <div class="learn-title">🟢 花萼</div>
+        </div>
+      </div>
+      <div class="learn-content">
+        <ul>
+          <li><strong>綠色小葉子</strong>，像厚被子</li>
+          <li><strong>功能：</strong>保護花花</li>
+          <li>花未開時，花萼包得好緊，好似綠色保護傘 🛡️</li>
+          <li>香港扶桑花嘅花萼好堅韌！</li>
+          <li>九重葛嘅花萼好耐風雨！</li>
+          <li>有啲花萼會變紅色幫手吸引昆蟲</li>
+        </ul>
+        <button class="speak-btn" onclick="speak('花萼，綠色小葉子，像厚被子，功能是保護花花')">🔊 語音朗讀</button>
+        <div class="action-reminder">動作：雙手抱抱 🤗</div>
+      </div>
+    </div>
+
+    <!-- 花冠 -->
+    <div class="learn-section">
+      <div class="learn-header">
+        <div class="learn-icon" style="background:var(--rainbow);">🌈</div>
+        <div>
+          <div class="learn-title">🌈 花冠</div>
+        </div>
+      </div>
+      <div class="learn-content">
+        <ul>
+          <li><strong>彩色花瓣</strong>，好靚好香</li>
+          <li><strong>功能：</strong>吸引昆蟲</li>
+          <li>靚顏色會吸引蜜蜂蝴蝶</li>
+          <li>香港雞蛋花嘅花冠又大又香！</li>
+          <li>像穿彩虹衣服跳舞</li>
+          <li>昆蟲最鍾意嚟開Party！</li>
+        </ul>
+        <button class="speak-btn" onclick="speak('花冠，彩色花瓣，好靚好香，功能是吸引昆蟲')">🔊 語音朗讀</button>
+        <div class="action-reminder">動作：張開手轉圈 💃</div>
+      </div>
+    </div>
+
+    <!-- 雄蕊 -->
+    <div class="learn-section">
+      <div class="learn-header">
+        <div class="learn-icon" style="background:var(--male);">👨</div>
+        <div>
+          <div class="learn-title">👨 雄蕊</div>
+        </div>
+      </div>
+      <div class="learn-content">
+        <ul>
+          <li><strong>有黃色花粉</strong>，像送禮物</li>
+          <li><strong>功能：</strong>送花粉</li>
+          <li>花粉可以飛好遠</li>
+          <li>蜜蜂收集花粉做蜂蜜 🍯</li>
+          <li>香港扶桑花雄蕊好長！</li>
+          <li>一朵花有好多雄蕊，好厲害呀！</li>
+        </ul>
+        <button class="speak-btn" onclick="speak('雄蕊，有黃色花粉，像送禮物，功能是送花粉')">🔊 語音朗讀</button>
+        <div class="action-reminder">動作：拋一拋 🎁</div>
+      </div>
+    </div>
+
+    <!-- 雌蕊 -->
+    <div class="learn-section">
+      <div class="learn-header">
+        <div class="learn-icon" style="background:var(--female);">👩</div>
+        <div>
+          <div class="learn-title">👩 雌蕊</div>
+        </div>
+      </div>
+      <div class="learn-content">
+        <ul>
+          <li><strong>喺花中間</strong>，接收花粉</li>
+          <li><strong>功能：</strong>長果實</li>
+          <li>接收花粉後慢慢變大</li>
+          <li>之後長出我哋食嘅果實 🍎</li>
+          <li>香港雞蛋花之後會結果！</li>
+          <li>香港紫荊花都靠雌蕊結果</li>
+        </ul>
+        <button class="speak-btn" onclick="speak('雌蕊，在花中間，接收花粉，功能是長果實')">🔊 語音朗讀</button>
+        <div class="action-reminder">動作：雙手捧圓 🌰</div>
+      </div>
+    </div>
+
+    <!-- 小測驗 -->
+    <div class="quiz-container">
+      <div class="quiz-title">🌟 小測驗 🌟</div>
+      <div id="quiz-area"></div>
+      <button onclick="resetQuiz()" style="margin-top:20px; padding:15px 30px; font-size:1.2rem; background:#6c5ce7; color:white; border-radius:15px;">🔄 再做一次</button>
+    </div>
+
+    <!-- 回家任務 -->
+    <div class="homework-box">
+      <h3>🏠 回家任務</h3>
+      <ul>
+        <li>記得同爸爸媽媽分享你學到嘅嘢！</li>
+        <li>去花園搵扶桑花、雞蛋花、九重葛睇吓</li>
+        <li>試吓做「雙手抱抱」動作記住花萼</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 遊戲區 ===== -->
+<div id="games-page" class="page">
+  <button class="back-btn" onclick="showPage('home')">🏠 回主頁</button>
+  <h1 class="games-title">🎮 遊戲區 🎮</h1>
+
+  <!-- 遊戲一：扭蛋機 -->
+  <div class="game-card">
+    <span class="game-level-label easy">初階</span>
+    <h3>🎰 扭蛋機認名稱</h3>
+    <p>點擊扭蛋機，學習花花四個朋友嘅名稱！</p>
+    <div class="gacha-area">
+      <div class="gacha-machine">
+        <div class="gacha-top">🎁</div>
+        <div class="gacha-window" id="gacha-window">❓</div>
+        <div class="gacha-slot"></div>
+      </div>
+      <button class="game-btn easy" onclick="spinGacha()" id="gacha-btn">🎲 扭吓！</button>
+      <div class="spin-result" id="gacha-result"></div>
+      <div class="capsule-collection" id="gacha-collection"></div>
+    </div>
+  </div>
+
+  <!-- 遊戲二：夾公仔配功能 -->
+  <div class="game-card">
+    <span class="game-level-label medium">中階</span>
+    <h3>🧲 夾公仔配功能</h3>
+    <p>點擊正確嘅圖片，配對佢嘅功能！</p>
+    <div class="claw-area">
+      <div class="claw-game-bg">
+        <div class="claw-items" id="claw-items"></div>
+      </div>
+      <p style="color:white; font-size:1.2rem; margin:15px 0;">配對：</p>
+      <div class="claw-target" id="claw-targets"></div>
+      <div class="match-result" id="match-result"></div>
+      <button class="game-btn medium" onclick="resetClaw()">🔄 重新挑戰</button>
+    </div>
+  </div>
+
+  <!-- 遊戲三：小花成長 -->
+  <div class="game-card">
+    <span class="game-level-label hard">高階</span>
+    <h3>🌷 小花成長挑戰</h3>
+    <p>順序點擊組件，種出你嘅小花！</p>
+    <div class="flower-builder">
+      <div class="build-progress">
+        <div class="progress-dot" id="prog1"></div>
+        <div class="progress-dot" id="prog2"></div>
+        <div class="progress-dot" id="prog3"></div>
+        <div class="progress-dot" id="prog4"></div>
+      </div>
+      <div class="flower-stage">
+        <div class="flower-display" id="flower-display"></div>
+      </div>
+      <div class="build-message" id="build-msg">點擊下方組件，由下而上建立小花！</div>
+      <div class="part-selector" id="part-selector"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 老師後台 ===== -->
+<div id="admin-page" class="page">
+  <button class="back-btn" onclick="showPage('home')">🏠 回主頁</button>
+  
+  <!-- 登入 -->
+  <div class="admin-login" id="admin-login">
+    <h2 style="margin-bottom:20px;">🔐 老師登入</h2>
+    <input type="password" id="admin-pw" placeholder="輸入密碼" />
+    <button onclick="adminLogin()">登入</button>
+  </div>
+
+  <!-- 後台面板 -->
+  <div class="admin-panel" id="admin-panel">
+    <h1 style="text-align:center; margin:20px 0;">📊 學生學習報告</h1>
+    <div style="max-width:900px; margin:0 auto;">
+      <div class="student-list" id="student-list"></div>
+    </div>
+    <button onclick="logoutAdmin()" style="margin:20px auto; display:block; padding:12px 25px; background:#636e72; color:white; border-radius:15px;">登出</button>
+  </div>
+</div>
+
+<script>
+// ===== 全域狀態 =====
+let currentSlide = 1;
+const totalSlides = 15;
+
+// ===== 頁面切換 =====
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  if (page === 'slides') document.getElementById('slides-page').classList.add('active');
+  else if (page === 'learn') document.getElementById('learn-page').classList.add('active');
+  else if (page === 'games') document.getElementById('games-page').classList.add('active');
+  else if (page === 'admin') document.getElementById('admin-page').classList.add('active');
+  else document.getElementById('home-page').classList.add('active');
+}
+
+// ===== 投影片控制 =====
+function updateSlide() {
+  document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+  document.querySelector(`[data-slide="${currentSlide}"]`).classList.add('active');
+  document.getElementById('current-slide').textContent = currentSlide;
+}
+function nextSlide() {
+  if (currentSlide < totalSlides) { currentSlide++; updateSlide(); }
+}
+function prevSlide() {
+  if (currentSlide > 1) { currentSlide--; updateSlide(); }
+}
+function toggleFullscreen() {
+  if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+  else document.exitFullscreen();
+}
+
+// ===== 語音朗讀 =====
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    const utt = new SpeechSynthesisUtterance(text);
+    utt.lang = 'zh-Hant';
+    utt.rate = 0.9;
+    speechSynthesis.speak(utt);
+  } else {
+    showToast('抱歉，語音功能不支援');
+  }
+}
+
+// ===== 小測驗 =====
+const quizData = [
+  { q: '1️⃣ 花萼係咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 0 },
+  { q: '2️⃣ 花萼嘅功能係咩？', opts: ['吸引昆蟲', '保護花花', '送花粉', '長果實'], ans: 1 },
+  { q: '3️⃣ 花冠係由咩組成？', opts: ['葉子', '花粉', '花瓣', '根'], ans: 2 },
+  { q: '4️⃣ 花冠嘅功能係咩？', opts: ['保護花花', '吸收陽光', '吸引昆蟲', '長果實'], ans: 2 },
+  { q: '5️⃣ 雄蕊有咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 2 },
+  { q: '6️⃣ 雄蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '接收花粉', '長果實'], ans: 1 },
+  { q: '7️⃣ 雌蕊喺花嘅邊度？', opts: ['最外面', '中間', '底部', '旁邊'], ans: 1 },
+  { q: '8️⃣ 雌蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '吸引昆蟲', '長果實'], ans: 3 }
+];
+let quizAnswers = [];
+function initQuiz() {
+  const area = document.getElementById('quiz-area');
+  area.innerHTML = '';
+  quizAnswers = [];
+  quizData.forEach((q, i) => {
+    quizAnswers.push(null);
+    const div = document.createElement('div');
+    div.className = 'quiz-item';
+    div.id = `quiz-${i}`;
+    div.innerHTML = `<div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">${q.opts.map((o, j) => 
+        `<button class="quiz-opt" onclick="checkAns(${i},${j})">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="feed-${i}"></div>`;
+    area.appendChild(div);
+  });
+}
+function checkAns(qi, oi) {
+  const correct = quizData[qi].ans === oi;
+  const item = document.getElementById(`quiz-${qi}`);
+  const btns = item.querySelectorAll('.quiz-opt');
+  btns.forEach((b, i) => {
+    b.classList.remove('selected');
+    if (i === quizData[qi].ans) b.classList.add('correct');
+    else if (i === oi && !correct) b.classList.add('wrong');
+  });
+  const feed = document.getElementById(`feed-${qi}`);
+  if (correct) {
+    item.classList.add('correct');
+    feed.className = 'quiz-feedback show good';
+    feed.innerHTML = '✅ 好嘢！你做啱咗！⭐';
+    showConfetti();
+    speak('好嘢！你做啱咗');
+  } else {
+    item.classList.add('wrong');
+    feed.className = 'quiz-feedback show bad';
+    feed.innerHTML = '❌ 加油～再試一次！';
+    item.style.animation = 'shake 0.5s';
+    setTimeout(() => item.style.animation = '', 500);
+  }
+  saveProgress();
+}
+function resetQuiz() {
+  initQuiz();
+  showToast('試卷重新開始！加油！💪');
+}
+
+// ===== 回饋動畫 =====
+function showConfetti() {
+  const c = document.createElement('div');
+  c.className = 'confetti';
+  document.body.appendChild(c);
+  const colors = ['#4CAF50', '#E91E63', '#2196F3', '#FF9800', '#FFD700', '#9C27B0'];
+  for (let i = 0; i < 50; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.animationDelay = Math.random() * 0.5 + 's';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+    c.appendChild(p);
+  }
+  setTimeout(() => c.remove(), 3000);
+}
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
+// ===== 遊戲一：扭蛋機 =====
+const gachaItems = [
+  { name: '🟢花萼', desc: '保護花花', color: 'green' },
+  { name: '🌈花冠', desc: '吸引昆蟲', color: 'pink' },
+  { name: '👨雄蕊', desc: '送花粉', color: 'blue' },
+  { name: '👩雌蕊', desc: '長果實', color: 'orange' }
+];
+let gachaCollected = [];
+function spinGacha() {
+  const btn = document.getElementById('gacha-btn');
+  btn.disabled = true;
+  btn.textContent = '🎡 轉動緊...';
+  const window = document.getElementById('gacha-window');
+  const result = document.getElementById('gacha-result');
+  
+  // 滾動動畫
+  let count = 0;
+  const interval = setInterval(() => {
+    window.textContent = gachaItems[count % 4].name;
+    count++;
+  }, 100);
+  
+  setTimeout(() => {
+    clearInterval(interval);
+    const prize = gachaItems[Math.floor(Math.random() * 4)];
+    window.textContent = prize.name;
+    result.innerHTML = `恭喜抽到：${prize.name}<br>${prize.desc}`;
+    
+    if (!gachaCollected.find(c => c.name === prize.name)) {
+      gachaCollected.push(prize);
+      showToast('🎉 新發現！');
+      showConfetti();
+    }
+    
+    updateGachaCollection();
+    btn.disabled = false;
+    btn.textContent = '🎲 再扭過！';
+    speak(prize.name + '，' + prize.desc);
+    saveProgress();
+  }, 1500);
+}
+function updateGachaCollection() {
+  const col = document.getElementById('gacha-collection');
+  col.innerHTML = gachaCollected.map(c => 
+    `<span class="capsule ${c.color}">${c.name}</span>`).join('');
+}
+
+// ===== 遊戲二：夾公仔配對 =====
+let clawMatched = [];
+function initClaw() {
+  clawMatched = [];
+  const items = document.getElementById('claw-items');
+  const targets = document.getElementById('claw-targets');
+  
+  // 隨機排列
+  const shuffled = [...gachaItems].sort(() => Math.random() - 0.5);
+  
+  items.innerHTML = shuffled.map((item, i) => 
+    `<div class="claw-item" id="ci${i}" onclick="selectClaw(${i})" data-name="${item.name}">
+      ${item.name.split('')[0]}<br><small>${item.name}</small>
+    </div>`).join('');
+  
+  targets.innerHTML = gachaItems.map((item, i) => 
+    `<div class="claw-target-slot" id="ts${i}" data-target="${item.name}">
+      ❓<br><small>${item.desc}</small>
+    </div>`).join('');
+  
+  document.getElementById('match-result').innerHTML = '';
+  saveProgress();
+}
+function selectClaw(idx) {
+  const item = document.getElementById(`ci${idx}`);
+  if (item.classList.contains('matched')) return;
+  
+  // 找到對應target
+  const name = item.dataset.name;
+  const targetIdx = gachaItems.findIndex(g => g.name === name);
+  const target = document.getElementById(`ts${targetIdx}`);
+  
+  if (!target.classList.contains('filled')) {
+    item.classList.add('matched');
+    target.classList.add('filled');
+    target.innerHTML = item.innerHTML;
+    clawMatched.push(name);
+    
+    if (clawMatched.length === 4) {
+      document.getElementById('match-result').innerHTML = '🎉 全部配對成功！';
+      showConfetti();
+      speak('全部配對成功，你好叻！');
+    }
+  }
+  saveProgress();
+}
+function resetClaw() {
+  initClaw();
+  showToast('重新挑戰！💪');
+}
+
+// ===== 遊戲三：小花成長 =====
+const flowerParts = [
+  { id: 'stem', name: '🌱花莖', label: '花莖', color: '#4CAF50' },
+  { id: 'sepal', name: '🟢花萼', label: '花萼', color: '#81C784' },
+  { id: 'corolla', name: '🌸花冠', label: '花冠', color: '#E91E63' },
+  { id: 'pistil', name: '👩雌蕊', label: '雌蕊', color: '#FF9800' }
+];
+let buildStep = 0;
+function initFlowerBuilder() {
+  buildStep = 0;
+  const selector = document.getElementById('part-selector');
+  const display = document.getElementById('flower-display');
+  
+  display.innerHTML = '<div style="color:white;font-size:1.2rem;">順序：花莖 → 花萼 → 花冠 → 雌蕊</div>';
+  document.getElementById('build-msg').textContent = '點擊下方組件，由下而上建立小花！';
+  
+  selector.innerHTML = flowerParts.map((p, i) => 
+    `<button class="part-btn" id="pb${i}" onclick="selectPart(${i})" style="border-color:${p.color}">${p.name}</button>`).join('');
+  
+  [1,2,3,4].forEach(i => document.getElementById(`prog${i}`).classList.remove('done'));
+  saveProgress();
+}
+function selectPart(idx) {
+  const part = flowerParts[idx];
+  const expected = flowerParts[buildStep];
+  
+  if (part.id === expected.id) {
+    // 正確
+    const display = document.getElementById('flower-display');
+    const partEl = document.createElement('div');
+    partEl.className = 'flower-part highlight';
+    partEl.innerHTML = `${part.name}<div class="flower-label">${part.label}</div>`;
+    display.prepend(partEl);
+    
+    document.getElementById(`pb${idx}`).classList.add('locked');
+    document.getElementById(`pb${idx}`).textContent = '✅' + part.name;
+    document.getElementById(`prog${buildStep + 1}`).classList.add('done');
+    
+    buildStep++;
+    
+    if (buildStep === 4) {
+      document.getElementById('build-msg').innerHTML = '🎉 小花完成！🌷🌸🌺🌻';
+      display.innerHTML = `<div class="complete-flower">🌷</div>`;
+      showConfetti();
+      speak('小花完成！你好叻！');
+    } else {
+      document.getElementById('build-msg').textContent = `仲差 ${4 - buildStep} 個部分！`;
+    }
+  } else {
+    // 錯誤提示
+    document.getElementById(`pb${idx}`).style.animation = 'shake 0.5s';
+    setTimeout(() => document.getElementById(`pb${idx}`).style.animation = '', 500);
+    showToast(`順序係：${flowerParts[buildStep].name}`);
+  }
+  saveProgress();
+}
+
+// ===== 老師後台 =====
+function adminLogin() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === 'gundam_admin_2024') {
+    document.getElementById('admin-login').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    loadStudentData();
+  } else {
+    showToast('密碼錯誤！');
+  }
+}
+function logoutAdmin() {
+  document.getElementById('admin-login').style.display = 'block';
+  document.getElementById('admin-panel').style.display = 'none';
+  document.getElementById('admin-pw').value = '';
+}
+function loadStudentData() {
+  const data = JSON.parse(localStorage.getItem('flowerGardenProgress') || '{}');
+  const list = document.getElementById('student-list');
+  
+  // 預設示範數據（實際使用時從localStorage讀取）
+  const students = data.students || [
+    { name: '學生A', quizScore: 7, gamesPlayed: 5, gachaNew: 3, clawMatched: 4, flowerBuilt: 1 },
+    { name: '學生B', quizScore: 5, gamesPlayed: 3, gachaNew: 2, clawMatched: 2, flowerBuilt: 0 }
+  ];
+  
+  list.innerHTML = `<table class="student-table">
+    <tr>
+      <th>學生</th>
+      <th>小測驗正確率</th>
+      <th>遊戲完成次數</th>
+      <th>總錶現</th>
+    </tr>
+    ${students.map(s => {
+      const quizPct = Math.round((s.quizScore / 8) * 100);
+      const gamesTotal = s.gamesPlayed + s.gachaNew + s.clawMatched + s.flowerBuilt;
+      return `<tr>
+        <td class="student-name">${s.name}</td>
+        <td>
+          ${quizPct}%
+          <div class="stat-bar"><div class="stat-fill green" style="width:${quizPct}%"></div></div>
+        </td>
+        <td>
+          ${gamesTotal}次
+          <div class="stat-bar">
+            <div class="stat-fill blue" style="width:${Math.min(100, gamesTotal * 10)}%"></div>
+          </div>
+        </td>
+        <td>⭐ ${quizPct >= 75 ? '👍' : quizPct >= 50 ? '👌' : '💪'}</td>
+      </tr>`;
+    }).join('')}
+  </table>`;
+}
+
+// ===== 進度儲存 =====
+function saveProgress() {
+  const data = {
+    quiz: quizAnswers,
+    gacha: gachaCollected,
+    claw: clawMatched,
+    flower: buildStep
+  };
+  localStorage.setItem('flowerGardenProgress', JSON.stringify(data));
+}
+function loadProgress() {
+  const data = JSON.parse(localStorage.getItem('flowerGardenProgress') || '{}');
+  if (data.gacha) gachaCollected = data.gacha;
+  if (data.claw) clawMatched = data.claw;
+  if (data.flower !== undefined) buildStep = data.flower;
+}
+
+// ===== 初始化 =====
+window.onload = function() {
+  initQuiz();
+  initClaw();
+  initFlowerBuilder();
+  loadProgress();
+  updateGachaCollection();
+};
+</script>
+</body>
+</html>
