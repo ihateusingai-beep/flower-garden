@@ -139,6 +139,28 @@ button:active { transform: scale(0.95); }
   vertical-align: middle;
 }
 
+/* 學習圖片包裝 */
+.img-learning-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 500px;
+  margin: 15px 0;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+.img-learning-wrap img {
+  width: 100%;
+  display: block;
+  border-radius: 15px;
+}
+.flower-svg-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
 /* Slide 主题背景 */
 .slide-3, .slide-4, .slide-5 { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
 .slide-6, .slide-7, .slide-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
@@ -735,7 +757,16 @@ button:active { transform: scale(0.95); }
   <!-- Slide 3: 花萼介紹 -->
   <div class="slide slide-3" data-slide="3">
     <h2>🟢 花萼（介紹）</h2>
-    <div style="font-size:4rem;">🌿</div>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <!-- 花萼標注：綠色，在花瓣底部周圍 -->
+        <circle cx="250" cy="340" r="45" fill="#4CAF50" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <polygon points="250,290 235,320 265,320" fill="#4CAF50" stroke="#2d3436" stroke-width="2"/>
+        <text x="315" y="300" font-size="22" font-weight="bold" fill="#2d3436" text-anchor="middle" font-family="Microsoft JhengHei">花萼</text>
+        <line x1="295" y1="340" x2="310" y2="300" stroke="#4CAF50" stroke-width="4"/>
+      </svg>
+    </div>
     <p class="action-box">綠色小葉子<br>像厚被子<br>功能：保護花花</p>
     <p style="color:#2d3436; font-weight:bold;">記住：花萼保護花花！</p>
   </div>
@@ -743,6 +774,15 @@ button:active { transform: scale(0.95); }
   <!-- Slide 4: 花萼有趣知識1 -->
   <div class="slide slide-4" data-slide="4">
     <h2>🟢 花萼小秘密</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="340" r="45" fill="#4CAF50" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <polygon points="250,290 235,320 265,320" fill="#4CAF50" stroke="#2d3436" stroke-width="2"/>
+        <text x="315" y="300" font-size="22" font-weight="bold" fill="#2d3436" text-anchor="middle" font-family="Microsoft JhengHei">花萼</text>
+        <line x1="295" y1="340" x2="310" y2="300" stroke="#4CAF50" stroke-width="4"/>
+      </svg>
+    </div>
     <p>花未開時，花萼包得好緊<br>好似綠色保護傘 🛡️</p>
     <p style="margin-top:15px;">香港扶桑花嘅花萼好堅韌！</p>
     <div class="action-box">動作：雙手抱抱</div>
@@ -751,6 +791,15 @@ button:active { transform: scale(0.95); }
   <!-- Slide 5: 花萼有趣知識2 -->
   <div class="slide slide-5" data-slide="5">
     <h2>🟢 花萼有趣事</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="340" r="45" fill="#4CAF50" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <polygon points="250,290 235,320 265,320" fill="#4CAF50" stroke="#2d3436" stroke-width="2"/>
+        <text x="315" y="300" font-size="22" font-weight="bold" fill="#2d3436" text-anchor="middle" font-family="Microsoft JhengHei">花萼</text>
+        <line x1="295" y1="340" x2="310" y2="300" stroke="#4CAF50" stroke-width="4"/>
+      </svg>
+    </div>
     <p>有啲花萼會變紅色幫手吸引昆蟲<br>佢保護花蕾好似保鏢咁</p>
     <p style="margin-top:15px;">九重葛嘅花萼好耐風雨！</p>
     <div class="action-box">你知唔知？好神奇呀！</div>
@@ -759,7 +808,15 @@ button:active { transform: scale(0.95); }
   <!-- Slide 6: 花冠介紹 -->
   <div class="slide slide-6" data-slide="6">
     <h2>🌈 花冠（介紹）</h2>
-    <div style="font-size:4rem;">🌺🌷🌸</div>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <!-- 花冠標注：粉紅色大花瓣 -->
+        <circle cx="250" cy="170" r="60" fill="#E91E63" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="250" y="130" font-size="22" font-weight="bold" fill="#E91E63" text-anchor="middle" font-family="Microsoft JhengHei">花冠</text>
+        <line x1="250" y1="170" x2="250" y2="138" stroke="#E91E63" stroke-width="4"/>
+      </svg>
+    </div>
     <p class="action-box">彩色花瓣<br>好靚好香<br>功能：吸引昆蟲</p>
     <p style="color:#e84393; font-weight:bold;">記住：花冠吸引昆蟲！</p>
   </div>
@@ -767,6 +824,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 7: 花冠有趣知識1 -->
   <div class="slide slide-7" data-slide="7">
     <h2>🌈 花冠小秘密</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="170" r="60" fill="#E91E63" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="250" y="130" font-size="22" font-weight="bold" fill="#E91E63" text-anchor="middle" font-family="Microsoft JhengHei">花冠</text>
+        <line x1="250" y1="170" x2="250" y2="138" stroke="#E91E63" stroke-width="4"/>
+      </svg>
+    </div>
     <p>靚顏色會吸引蜜蜂蝴蝶<br>香港雞蛋花嘅花冠又大又香！</p>
     <div class="action-box">像穿彩虹衣服跳舞<br>動作：張開手轉圈</div>
   </div>
@@ -774,6 +839,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 8: 花冠有趣知識2 -->
   <div class="slide slide-8" data-slide="8">
     <h2>🌈 花冠有趣事</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="170" r="60" fill="#E91E63" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="250" y="130" font-size="22" font-weight="bold" fill="#E91E63" text-anchor="middle" font-family="Microsoft JhengHei">花冠</text>
+        <line x1="250" y1="170" x2="250" y2="138" stroke="#E91E63" stroke-width="4"/>
+      </svg>
+    </div>
     <p><strong>蜜蜂故事：</strong><br>蜜蜂聞到花冠香味，就飛嚟食花蜜，順便幫花傳花粉，好似快樂小郵差！</p>
     <div class="action-box">昆蟲最鍾意嚟開Party！<br>好有趣呀！</div>
   </div>
@@ -781,7 +854,15 @@ button:active { transform: scale(0.95); }
   <!-- Slide 9: 雄蕊介紹 -->
   <div class="slide slide-9" data-slide="9">
     <h2>👨 雄蕊（介紹）</h2>
-    <div style="font-size:4rem;">🌾🍯</div>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <!-- 雄蕊標注：藍色，中央長管 -->
+        <circle cx="250" cy="130" r="50" fill="#2196F3" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="110" font-size="22" font-weight="bold" fill="#2196F3" text-anchor="middle" font-family="Microsoft JhengHei">雄蕊</text>
+        <line x1="295" y1="130" x2="335" y2="110" stroke="#2196F3" stroke-width="4"/>
+      </svg>
+    </div>
     <p class="action-box">有黃色花粉<br>像送禮物<br>功能：送花粉</p>
     <p style="color:#0984e3; font-weight:bold;">記住：雄蕊送花粉！</p>
   </div>
@@ -789,6 +870,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 10: 雄蕊有趣知識1 -->
   <div class="slide slide-10" data-slide="10">
     <h2>👨 雄蕊小秘密</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="130" r="50" fill="#2196F3" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="110" font-size="22" font-weight="bold" fill="#2196F3" text-anchor="middle" font-family="Microsoft JhengHei">雄蕊</text>
+        <line x1="295" y1="130" x2="335" y2="110" stroke="#2196F3" stroke-width="4"/>
+      </svg>
+    </div>
     <p>花粉可以飛好遠<br>蜜蜂收集花粉做蜂蜜 🍯</p>
     <p style="margin-top:15px;">香港扶桑花雄蕊好長！</p>
     <div class="action-box">動作：拋一拋</div>
@@ -797,6 +886,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 11: 雄蕊有趣知識2 -->
   <div class="slide slide-11" data-slide="11">
     <h2>👨 雄蕊有趣事</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="130" r="50" fill="#2196F3" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="110" font-size="22" font-weight="bold" fill="#2196F3" text-anchor="middle" font-family="Microsoft JhengHei">雄蕊</text>
+        <line x1="295" y1="130" x2="335" y2="110" stroke="#2196F3" stroke-width="4"/>
+      </svg>
+    </div>
     <p><strong>蜜蜂故事：</strong><br>雄蕊將花粉黏喺蜜蜂身上，蜜蜂飛去另一朵花幫忙！</p>
     <div class="action-box">一朵花有好多雄蕊<br>好厲害呀！</div>
   </div>
@@ -804,7 +901,15 @@ button:active { transform: scale(0.95); }
   <!-- Slide 12: 雌蕊介紹 -->
   <div class="slide slide-12" data-slide="12">
     <h2>👩 雌蕊（介紹）</h2>
-    <div style="font-size:4rem;">🌸🫒</div>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <!-- 雌蕊標注：橙色，在花中央 -->
+        <circle cx="250" cy="90" r="45" fill="#FF9800" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="85" font-size="22" font-weight="bold" fill="#FF9800" text-anchor="middle" font-family="Microsoft JhengHei">雌蕊</text>
+        <line x1="290" y1="90" x2="335" y2="85" stroke="#FF9800" stroke-width="4"/>
+      </svg>
+    </div>
     <p class="action-box">喺花中間<br>接收花粉<br>功能：長果實</p>
     <p style="color:#e17055; font-weight:bold;">記住：雌蕊長果實！</p>
   </div>
@@ -812,6 +917,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 13: 雌蕊有趣知識1 -->
   <div class="slide slide-13" data-slide="13">
     <h2>👩 雌蕊小秘密</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="90" r="45" fill="#FF9800" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="85" font-size="22" font-weight="bold" fill="#FF9800" text-anchor="middle" font-family="Microsoft JhengHei">雌蕊</text>
+        <line x1="290" y1="90" x2="335" y2="85" stroke="#FF9800" stroke-width="4"/>
+      </svg>
+    </div>
     <p>接收花粉後慢慢變大<br>之後長出我哋食嘅果實 🍎</p>
     <p style="margin-top:15px;">香港雞蛋花之後會結果！</p>
   </div>
@@ -819,6 +932,14 @@ button:active { transform: scale(0.95); }
   <!-- Slide 14: 雌蕊有趣知識2 -->
   <div class="slide slide-14" data-slide="14">
     <h2>👩 雌蕊有趣事</h2>
+    <div class="img-learning-wrap" style="position:relative; display:inline-block; max-width:500px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Hibiscus_flower_close.jpg/800px-Hibiscus_flower_close.jpg" alt="扶桑花" style="width:100%; border-radius:15px;">
+      <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;">
+        <circle cx="250" cy="90" r="45" fill="#FF9800" fill-opacity="0.35" stroke="#2d3436" stroke-width="3"/>
+        <text x="340" y="85" font-size="22" font-weight="bold" fill="#FF9800" text-anchor="middle" font-family="Microsoft JhengHei">雌蕊</text>
+        <line x1="290" y1="90" x2="335" y2="85" stroke="#FF9800" stroke-width="4"/>
+      </svg>
+    </div>
     <p><strong>蜜蜂故事：</strong><br>蜜蜂幫雌蕊送嚟花粉，雌蕊就開心長成果實</p>
     <p style="margin-top:15px;">香港紫荊花都靠雌蕊結果</p>
     <div class="action-box">動作：雙手捧圓<br>好神奇呀！</div>
