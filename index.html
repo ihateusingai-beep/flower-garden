@@ -260,6 +260,7 @@ button:active { transform: scale(0.95); }
   padding: 20px;
   margin-bottom: 15px;
   border-left: 5px solid #dfe6e9;
+  position: relative;
 }
 .quiz-item.correct { border-left-color: var(--green); background: #e8f5e9; }
 .quiz-item.wrong { border-left-color: #e74c3c; background: #ffebee; }
@@ -1239,15 +1240,67 @@ function speak(text) {
 }
 
 // ===== 小測驗 =====
+// Wikimedia扶桑花圖片
+const wikimediaImg = 'https://commons.wikimedia.org/wiki/Special:FilePath/Hibiscus_rosa-sinensis1.jpg?width=800';
+
+// Q1-2: 花萼（底部圓圈）
+const quizSepalImg = `<div class="img-learning-wrap" style="max-width:350px; margin:10px auto;">
+  <img src="${wikimediaImg}" alt="扶桑花" style="width:100%; border-radius:15px;">
+  <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    <circle cx="250" cy="350" r="50" fill="#4CAF50" fill-opacity="0.4" stroke="#2d3436" stroke-width="3"/>
+    <polygon points="250,300 230,340 270,340" fill="#4CAF50" stroke="#2d3436" stroke-width="2"/>
+    <text x="320" y="320" font-size="22" font-weight="bold" fill="#4CAF50" text-anchor="middle" font-family="Microsoft JhengHei">花萼</text>
+    <line x1="300" y1="350" x2="315" y2="320" stroke="#4CAF50" stroke-width="4"/>
+  </svg>
+</div>`;
+
+// Q3-4: 花冠（紅色花瓣）
+const quizCorollaImg = `<div class="img-learning-wrap" style="max-width:350px; margin:10px auto;">
+  <img src="${wikimediaImg}" alt="扶桑花" style="width:100%; border-radius:15px;">
+  <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    <ellipse cx="130" cy="140" rx="55" ry="30" fill="#e74c3c" fill-opacity="0.4" stroke="#c0392b" stroke-width="3" transform="rotate(-30 130 140)"/>
+    <ellipse cx="370" cy="140" rx="55" ry="30" fill="#e74c3c" fill-opacity="0.4" stroke="#c0392b" stroke-width="3" transform="rotate(30 370 140)"/>
+    <ellipse cx="150" cy="250" rx="55" ry="30" fill="#e74c3c" fill-opacity="0.4" stroke="#c0392b" stroke-width="3" transform="rotate(-60 150 250)"/>
+    <ellipse cx="350" cy="250" rx="55" ry="30" fill="#e74c3c" fill-opacity="0.4" stroke="#c0392b" stroke-width="3" transform="rotate(60 350 250)"/>
+    <ellipse cx="250" cy="100" rx="55" ry="30" fill="#e74c3c" fill-opacity="0.4" stroke="#c0392b" stroke-width="3"/>
+    <text x="250" y="50" font-size="22" font-weight="bold" fill="#e74c3c" text-anchor="middle" font-family="Microsoft JhengHei">花冠（花瓣）</text>
+    <line x1="250" y1="70" x2="250" y2="90" stroke="#e74c3c" stroke-width="4"/>
+  </svg>
+</div>`;
+
+// Q5-6: 雄蕊（黃色長條）
+const quizStamenImg = `<div class="img-learning-wrap" style="max-width:350px; margin:10px auto;">
+  <img src="${wikimediaImg}" alt="扶桑花" style="width:100%; border-radius:15px;">
+  <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    <rect x="200" y="140" width="100" height="70" rx="35" fill="#FFD700" fill-opacity="0.4" stroke="#F39C12" stroke-width="3"/>
+    <text x="250" y="200" font-size="20" font-weight="bold" fill="#F39C12" text-anchor="middle" font-family="Microsoft JhengHei">雄蕊（花藥）</text>
+    <line x1="250" y1="200" x2="250" y2="140" stroke="#F39C12" stroke-width="4"/>
+    <circle cx="250" cy="135" r="8" fill="#FFD700" stroke="#F39C12" stroke-width="2"/>
+  </svg>
+</div>`;
+
+// Q7-8: 雌蕊（中間紅色圓圈）
+const quizPistilImg = `<div class="img-learning-wrap" style="max-width:350px; margin:10px auto;">
+  <img src="${wikimediaImg}" alt="扶桑花" style="width:100%; border-radius:15px;">
+  <svg class="flower-svg-overlay" viewBox="0 0 500 400" style="position:absolute; top:0; left:0; width:100%; height:100%;">
+    <circle cx="250" cy="130" r="40" fill="#FF9800" fill-opacity="0.4" stroke="#E65100" stroke-width="3"/>
+    <text x="340" y="120" font-size="22" font-weight="bold" fill="#FF9800" text-anchor="middle" font-family="Microsoft JhengHei">雌蕊柱頭</text>
+    <line x1="290" y1="130" x2="335" y2="120" stroke="#FF9800" stroke-width="4"/>
+    <rect x="245" y="165" width="10" height="80" rx="5" fill="#FF9800" fill-opacity="0.5" stroke="#E65100" stroke-width="2"/>
+    <text x="340" y="210" font-size="16" font-weight="bold" fill="#FF9800" text-anchor="middle" font-family="Microsoft JhengHei">雌蕊花柱</text>
+    <line x1="255" y1="200" x2="335" y2="210" stroke="#FF9800" stroke-width="3"/>
+  </svg>
+</div>`;
+
 const quizData = [
-  { q: '1️⃣ 花萼係咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 0 },
-  { q: '2️⃣ 花萼嘅功能係咩？', opts: ['吸引昆蟲', '保護花花', '送花粉', '長果實'], ans: 1 },
-  { q: '3️⃣ 花冠係由咩組成？', opts: ['葉子', '花粉', '花瓣', '根'], ans: 2 },
-  { q: '4️⃣ 花冠嘅功能係咩？', opts: ['保護花花', '吸收陽光', '吸引昆蟲', '長果實'], ans: 2 },
-  { q: '5️⃣ 雄蕊有咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 2 },
-  { q: '6️⃣ 雄蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '接收花粉', '長果實'], ans: 1 },
-  { q: '7️⃣ 雌蕊喺花嘅邊度？', opts: ['最外面', '中間', '底部', '旁邊'], ans: 1 },
-  { q: '8️⃣ 雌蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '吸引昆蟲', '長果實'], ans: 3 }
+  { q: '1️⃣ 花萼係咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 0, img: quizSepalImg },
+  { q: '2️⃣ 花萼嘅功能係咩？', opts: ['吸引昆蟲', '保護花花', '送花粉', '長果實'], ans: 1, img: quizSepalImg },
+  { q: '3️⃣ 花冠係由咩組成？', opts: ['葉子', '花粉', '花瓣', '根'], ans: 2, img: quizCorollaImg },
+  { q: '4️⃣ 花冠嘅功能係咩？', opts: ['保護花花', '吸收陽光', '吸引昆蟲', '長果實'], ans: 2, img: quizCorollaImg },
+  { q: '5️⃣ 雄蕊有咩顏色？', opts: ['綠色', '紅色', '黃色', '藍色'], ans: 2, img: quizStamenImg },
+  { q: '6️⃣ 雄蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '接收花粉', '長果實'], ans: 1, img: quizStamenImg },
+  { q: '7️⃣ 雌蕊喺花嘅邊度？', opts: ['最外面', '中間', '底部', '旁邊'], ans: 1, img: quizPistilImg },
+  { q: '8️⃣ 雌蕊嘅功能係咩？', opts: ['保護花花', '送花粉', '吸引昆蟲', '長果實'], ans: 3, img: quizPistilImg }
 ];
 let quizAnswers = [];
 function initQuiz() {
@@ -1260,6 +1313,7 @@ function initQuiz() {
     div.className = 'quiz-item';
     div.id = `quiz-${i}`;
     div.innerHTML = `<div class="quiz-q">${q.q}</div>
+      ${q.img || ''}
       <div class="quiz-options">${q.opts.map((o, j) => 
         `<button class="quiz-opt" onclick="checkAns(${i},${j})">${o}</button>`).join('')}
       </div>
